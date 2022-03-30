@@ -16,7 +16,9 @@ potential problems
 > Aramid, and/or kevlar to protect from the heat and chemicals. Underneath
 > this they wear a moisture barrier that insulates the suit and provides
 > extra thermal protection. The inner layer acts as a thermal barrier that
-> wicks moisture outside the suit for user comfort.
+> wicks moisture outside the suit for user comfort. They also use helmets
+> of materials that both require protection from falling objects, but still
+> resist residual heat from the flames.
 > 
 > These garments are heavy and can weigh upwards of 20lbs each. This can
 > lead more easily to fatigue on the wearer due to the added weight in 
