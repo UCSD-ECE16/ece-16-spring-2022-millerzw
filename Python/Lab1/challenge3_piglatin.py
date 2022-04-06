@@ -10,7 +10,7 @@ def eng_to_pig(phrase):
         punct="!.@#$%^&*"
         if (word[0] in vowels):
             words[i]+="yay"
-        #Case Consonant or Y
+        #Case Consonant or Y or Qu
         else:
             for j, letter in enumerate(word):
                 #Case Qu
