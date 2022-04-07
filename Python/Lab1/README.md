@@ -76,7 +76,7 @@ datatypes in lists and what you can and cant do to edit lists, etc.
     believe my fault lies in the fact that "in" is only two characters long
     but i'm not 100% sure. Below are my results from the code.
 
-![Screenshot](Python/Lab1/images/top12.JPG)
-![Screenshot](Python/Lab1/images/bottom25.JPG)
+![Screenshot](./images/top12.JPG)
+![Screenshot](./images/bottom25.JPG)
 
 ---
