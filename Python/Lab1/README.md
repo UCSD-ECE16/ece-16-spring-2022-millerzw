@@ -48,14 +48,35 @@ datatypes in lists and what you can and cant do to edit lists, etc.
 
 ---
 **Challenge_1** :
-
+    This task played kind of like the tutorials but with more active
+    Excercises. More than anything this challenge looked to improve the 
+    users speed with python programming. I had to look up the documentation
+    for certain functions on stackOverflow, but it made me faster. In regards
+    to how each excercise was completed, there is code within the 
+    challenge1_worksheet.py file
 
 ---
 **Challenge_2** :
-
+    This challenge looked to gamiliarize us more with arrays in python.
+    Specifically we had to have a better understanding of how to iterate
+    through them. It required us to first loop through the days to create
+    a plan for buying and selling, and then loop through our plan to
+    calculate what our profits would have been and how many shares we
+    would've had
 
 ---
 **Challenge_3** :
+    This challenge was the most difficult of the three and required us
+    to make a piglatin translator from both eng to pig and pig to eng.
+    The basic premise is outlined in the Challenge 3 documentation assignment
+    but there were a few hurdles that made it difficult. Specifically we 
+    had to deal with hyphens and punctuation. I outlined how the functions
+    work in comments of the challenge3_piglatin.py file. I was able to get
+    all the words coded and only had one fail to decode: 13 Mother-in-law. I
+    believe my fault lies in the fact that "in" is only two characters long
+    but i'm not 100% sure. Below are my results from the code.
 
+![Screenshot](Python/Lab1/images/top12.JPG)
+![Screenshot](Python/Lab1/images/bottom25.JPG)
 
 ---

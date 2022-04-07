@@ -30,13 +30,16 @@ def eng_to_pig(phrase):
                         words[i]+="ay"
                     break
         for k, letter in enumerate(words[i]):
+            #check if there is punctuation such as !, in which case we take it out and append it to end of word
             if (letter in punct):
                 words[i]=words[i][:k]+words[i][(k+1):]+letter
                 break
+        #check if we should preserve hyphens between word segments
         if ("-" in phrase):
             new_phrase+=words[i]+"-"
         else:
             new_phrase += words[i] + " "
+    # break off ending hyphen/whitespace and return phrase
     new_phrase=new_phrase[:-1]
     return new_phrase
 
@@ -74,10 +77,12 @@ def pig_to_eng(phrase):
             if (dictionary.check(word_to_check)):
                 words[i]=word_to_check+append_punct
                 break
+        # check if we should preserve hyphens between word segments
         if ("-" in phrase):
             new_phrase += words[i] + "-"
         else:
             new_phrase += words[i] + " "
+    #break off ending hyphen/whitespace and return phrase
     new_phrase=new_phrase[:-1]
     return new_phrase
 

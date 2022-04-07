@@ -20,24 +20,28 @@ strategy=np.zeros(81)
 
 for x in range(len(apple_stock)):
     if x>=3:
+        #Take previous 3 day average
         threeDay = apple_stock[x - 3]
         twoDay = apple_stock[x - 2]
         oneDay = apple_stock[x - 1]
         avg = (threeDay + twoDay + oneDay) / 3
 
-
+        #Case where today is less than avg: sell
         if (avg < apple_stock[x]):
             strategy[x]= -1
+        #Case where today is more than avg: buy
         elif (avg > apple_stock[x]):
             strategy[x]=1
+        #Case where today and avg are the same: do nothing
         else:
             strategy[x]=0
-
+    #Case where we are in day 1,2,3: do nothing
     else:
         strategy[x]=0
 
 print(strategy)
 
+#loop through our strategy array and calculate profits by sold*price that day= earn and buy*price that day= lost
 profits=0
 for idx,val in enumerate(strategy):
     profits += -1*val* apple_stock[idx]
@@ -45,6 +49,7 @@ for idx,val in enumerate(strategy):
 print("Profits:", profits)
 
 
+#loop through our strategy and add 1 for buying and subtract one for selling
 shares=100
 for x in strategy:
     shares+=x
