@@ -48,8 +48,7 @@ Started: 4/11/2022
     stopwatch. A seperate millis() comparator was used to display the output
     on a unique clock cycle.
     
-    ![](images/Challenge2.gif)
-
+![](images/Challnege2.gif)
 ---
 **Challenge_3** :
     In some essence, this was a modified version of challenge 2, where instead
