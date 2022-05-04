@@ -64,7 +64,7 @@ class Pedometer:
         # ...
         ma = filt.moving_average(x, 20)  # Compute Moving Average
         dt = filt.detrend(ma)  # Detrend the Signal
-        #bl, al = filt.create_filter(3, 1, "lowpass", self.__fs)  # Low-pass Filter Design
+        # bl, al = filt.create_filter(3, 1, "lowpass", self.__fs)  # Low-pass Filter Design
         x = filt.filter(self.__b, self.__a, dt)  # Low-pass Filter Signal
 
         # Store the filtered data
@@ -88,3 +88,13 @@ class Pedometer:
         self.__steps = 0
         self.__l1.clear()
         self.__filtered = np.zeros(self.__num_samples)
+
+    def get_low(self):
+        return self.__thresh_low
+
+    def get_high(self):
+        return self.__thresh_high
+
+    def adjust_thresholds(self,thresh_low, thresh_high):
+        self.__thresh_low=thresh_low
+        self.__thresh_high=thresh_high
