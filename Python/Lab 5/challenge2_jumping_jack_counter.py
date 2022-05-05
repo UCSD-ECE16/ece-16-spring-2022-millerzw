@@ -23,9 +23,8 @@ if __name__ == "__main__":
     sendSteps=0
     sendJumps=0
 
-    steps=2
-    jumps=4
-    i=0
+    steps=0
+    jumps=0
     try:
         previous_time = time()
         while (True):
@@ -33,7 +32,7 @@ if __name__ == "__main__":
             if (message != None):
                 try:
                     (m1, m2, m3, m4) = message.split(',')
-                    i=i+1
+                    print(message)
                 except ValueError:  # if corrupted data, skip the sample
                     continue
 
@@ -44,27 +43,29 @@ if __name__ == "__main__":
                 # if enough time has elapsed, process the data and plot it
                 current_time = time()
                 #if (current_time - previous_time > process_time):
-                if (i==512):
-                    i=0
+                if (int(m1)==511):
                     previous_time = current_time
 
                     steps, peaks, filtered = ped.process()
+                    #steps=steps+1
                     print("Step count: {:d}".format(steps))
 
                     jumps, peaksJ, filteredJ = jum.process()
+                    #jumps=jumps+1
                     print("Jump count: {:d}".format(jumps))
 
                     sendSteps=steps
                     sendJumps=jumps
 
                     #comms.send_message(str(steps))
-                    # plt.cla()
-                    # plt.plot(filtered)
-                    # plt.title("Step Count: %d" % steps)
-                    # plt.show(block=False)
-                    # plt.pause(0.001)
+                    plt.cla()
+                    plt.plot(filtered)
+                    plt.title("Step Count: %d" % steps)
+                    plt.show(block=False)
+                    plt.pause(0.001)
                 # we want to always send the step number, not just on the 1 second time
                 comms.send_message("steps " + str(sendSteps) + ",jumps " + str(sendJumps))
+                #print("steps " + str(sendSteps) + ",jumps " + str(sendJumps))
 
 
     except(Exception, KeyboardInterrupt) as e:
