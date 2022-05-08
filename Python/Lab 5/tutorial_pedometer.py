@@ -9,6 +9,7 @@ def load_data(filename):
 
 # Load the data as a 500x4 ndarray
 #data = load_data("./data/8steps_10s_50hz.csv")
+#data=load_data("./data/accelerometer.csv")
 data= load_data("./data/classMateMovement.csv")
 t = data[:, 0]
 t = (t - t[0]) / 1e3
@@ -19,8 +20,9 @@ az = data[:, 3]
 # Test the Pedometer with offline data
 ped = Pedometer(1500, 50, [])
 ped.add(ax, ay, az)
-#ped.adjust_thresholds(15,30) #threshold check for walking
-ped.adjust_thresholds(58,95) #threshold check for jumping
+ped.adjust_thresholds(15,30) #threshold check for walking
+#ped.adjust_thresholds(58,95) #threshold check for jumping
+#ped.adjust_thresholds(35,95)
 steps, peaks, filtered = ped.process()
 
 # Plot the results

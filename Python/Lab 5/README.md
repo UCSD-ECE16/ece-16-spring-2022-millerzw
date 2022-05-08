@@ -9,35 +9,46 @@ Started: 05/02/2022
 ---
 **Tutorial 1** :
 
-This  
+This tutorial went over file input into python from csv files. We are able to read
+through the csv file and seperate out the values by comma to put it into a python 
+array. We can format the csv file exactly how we sent the data from the MCU before
+in order to have it work with our old code and future code as well. We used a function
+to get the norm of the data as well so we can see the plot relative to x y and z values
+combined.
 
 ---
 ---
 **Tutorial 2** :
 
-It becomes an exact copy of the original graph when win is the length of the data
-It becomes noisy again due to the smoothing not being perfect curves and so the 
+Q1) It becomes an exact copy of the original graph when win is the length of the data
+Q2) It becomes noisy again due to the smoothing not being perfect curves and so the 
     derivative will jump around in slope
-If the sample frequency was 120Hz the max would be 60. We would need 20Hz at least
+Q3) If the sample frequency was 120Hz the max would be 60. We would need 20Hz at least
     to see a 0-10Hz bandwidth
+
+This tutorial went over a significant amount of singal processing. The main takeaway
+is how we can take a signal and smooth it out so we don't have to worry as much about
+the noise from the accelerometer. From this smoothness we can then make a funciton
+that gets the peaks within a range. This is useful to our pedometer as well as our
+jumping jack counter as both will check for peaks within a different magnitude range.
+We creat the DSP module for our library to have access to all these transformations
+later on in the lab.
 
 ---
 ---
 **Tutorial 3** :
 
-This  
-
----
----
-**Tutorial 4** :
-
-Here, we can see the benefit to checking that we are able to sample and write
-
----
----
-**Tutorial 5** :
-
-Finally, we will learn how to have python and arduino communicate: a key
+Here we create our pedometer class. It relies heavily on the DSP module we just
+created, that way we can use one function to do all the processing for us. We can
+either read from a file into arrays and process the arrays with our pedometer, or we
+can read in values from Arduino for live processing. Note the live processing can be
+a bit laggy due to the computer intensive nature of the live transformations and
+plotting. I also went back and added some extra functionality to the pedometer class
+outside the scope of the tutorial such as a function to adjust the min and max values
+for the detection algorithm as well as functions to get the min and max values for use
+in showing their coordinates on the graph. This prevents the need for edits to the 
+Pedometer class file which circumvents having to update the package each time we need
+a change to occur.
 
 ---
 ---
@@ -57,6 +68,10 @@ for a csv of them walking and jumping to tune my pedometer min and max values to
 account for a true test if I had bluetooth. These values are in comments in the
 respective challenge files. The CSV is in the data folder titled, classMateMovement.csv
 
+
+![](images/ped1.JPG)
+![](images/ped2.JPG)
+![](images/gifVidOne.gif)
 
 ---
 ---
@@ -79,4 +94,5 @@ count. Again, for the video purpose I used my hand with motion, but got correctl
 min/max values from a csv file provided to me by a classmate which has been noted in 
 the challenge 2 comment section.
 
+![](images/gifVidTwo.gif)
 ---
