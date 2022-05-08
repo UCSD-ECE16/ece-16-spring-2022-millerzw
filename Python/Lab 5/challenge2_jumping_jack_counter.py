@@ -17,6 +17,9 @@ if __name__ == "__main__":
     jum = Pedometer(num_samples, fs, [])
     jum.adjust_thresholds(30,70)
 
+    #thresholds for walking with bluetooth is 15 30
+    #thresholds for jumping with bluetooth is 58 95
+
     comms = Communication("COM4", 115200)
     comms.clear()  # just in case any junk is in the pipes
     comms.send_message("wearable")  # begin sending data

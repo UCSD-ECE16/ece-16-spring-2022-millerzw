@@ -42,6 +42,7 @@ if __name__ == "__main__":
 
     ped = Pedometer(num_samples, fs, [])
     ped.adjust_thresholds(12,40)
+    # thresholds for walking with bluetooth is 15 30
 
     comms = Communication("COM4", 115200)
     comms.clear()  # just in case any junk is in the pipes

@@ -3,14 +3,17 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 fs = 50      # sampling rate
-t_low = 25   # lower peak threshold
-t_high = 100 # upper peak threshold
+#t_low = 25   # lower peak threshold
+#t_high = 100 # upper peak threshold
+t_low = 3
+t_high = 8
 
 def load_data(filename):
   return np.genfromtxt(filename, delimiter=",")
 
 # Load the data as a 500x4 ndarray
-data = load_data("./data/8steps_10s_50hz.csv")
+#data = load_data("./data/8steps_10s_50hz.csv")
+data=load_data("./data/classMateMovement.csv")
 t = data[:,0]
 t = (t - t[0])/1e3
 ax = data[:,1]
