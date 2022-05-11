@@ -68,7 +68,7 @@ def estimate_sampling_rate(times):
 
 if __name__ == "__main__":
 
-    filename = "./data/ppg.csv"
+    filename = "data/a16568617_05_71.csv"
     collect_new_data = True
 
     # Get data from the MCU and save it if getting new data
