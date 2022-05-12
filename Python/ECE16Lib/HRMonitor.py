@@ -70,6 +70,10 @@ class HRMonitor:
         # Filter the signal (feel free to customize!)
         x = filt.detrend(x, 25)
         x = filt.moving_average(x, 5)
+
+        bl, al = filt.create_filter(3, 1, "lowpass", 50)  # Low-pass Filter Design
+        x = filt.filter(bl, al, x)  # Low-pass Filter Signal
+
         x = filt.gradient(x)
         x = filt.normalize(x)
 

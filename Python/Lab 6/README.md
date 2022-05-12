@@ -43,28 +43,17 @@ To get green, use mode 3 and use particleSensor.getGreen()
 ---
 **Challenge 1** :
 
-
+I only changed the design of the HRMonitor slightly to achieve the beats wanted. I added
+a lowpass filter to further try to smooth the signal and reduce noise. I found that
+this got my correlation from about 0.82 to 0.99. I believe the issue with my HRM at
+this stage is more to do with my counting of the heartbeats outside the scope of python.
+It seemed as if for every signal I counted one at the start or end that wasn't captured
+by python and thus my csv files were lacking them despite me counting them during the 
+upload process.
 
 ---
 ---
 **Challenge 2** :
 
-This challenge was very similar to Challenge1 but with some more work on the arduino
-side of things. A jump counter is essentially a less sensitive step counter, so we
-can re-use the pedometer but with a high min/max value check. It was important then
-to create a function in the Pedometer class to update the min/max values to more
-easily be able to tune both the steps and the jumps. As well as creating a function
-to return the min and max values in order to not worry about the scale on the graph.
-On arduino we are now
-keeping a buffer of the last samples, and sending them to Python only when the button
-is pressed. To accomplish this I filled an 512 size array by using the index i%512
-which essentially loops through the array. We did a button check like we did in earlier
-labs where a full press would be required to send the data over. So in python the code
-is modified from challenge 1 to always be trying to receive data, which it will only
-process once we get our buffer sent in and then display back both a jump and step
-count. Again, for the video purpose I used my hand with motion, but got correctly tuned
-min/max values from a csv file provided to me by a classmate which has been noted in 
-the challenge 2 comment section.
 
-![](images/gifVidTwo.gif)
 ---
