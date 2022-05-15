@@ -1,4 +1,5 @@
 #### by: Zach Miller A16568617
+#### worked with Justin Kane-Starr A15554881
 
 ##ReadMe
 
@@ -31,13 +32,21 @@ To get green, use mode 3 and use particleSensor.getGreen()
 ---
 **Tutorial 2** :
 
-
+I think that the ost important part of this tutorial was about normalizing the data.
+I wish Id have done it with the Pedometer, inf act I might go back and do it like that.
+It makes the readability of the graphs much better and it seems to make tuning
+the peak detector part of the system a lot easier. I added a section to the HRM class
+that wasn't discussed in the PPG part which was a lowpass filter. I found this gave
+me more accurate results.
 
 ---
 ---
 **Tutorial 3** :
 
-
+I had no issues with the data collection at this stage. This is most likely because
+I did it over serial instead of bluetooth and used a rubber band. My counts were
+pretty close however I think its possible some were off by 1 or 2 depending when 
+python started to count vs me.
 
 ---
 ---
@@ -51,9 +60,30 @@ It seemed as if for every signal I counted one at the start or end that wasn't c
 by python and thus my csv files were lacking them despite me counting them during the 
 upload process.
 
+![](images/chall1.JPG)
+![](images/chall1InAction.JPG)
+
 ---
 ---
 **Challenge 2** :
+Using the basis of the old Pedometer class, I just added the information from
+the tutorial to read in data from the IR led from arduino. Every second I would
+update the display if there wa s new calculated heart rate otherwise I display
+what was displayed ont he last cycle. One trick was displaying the heartrate
+on the OLED as we need to break off the decimal value from the HRM, or at least
+it looked cleaner this way.
 
+![](images/chall2.gif)
 
+---
+---
+**Challenge 3** :
+For this challenge I followed closely to the tutorial for getting the video
+frames and then getting the average red value. I did have to mess with the 
+time library a bit to make sure everything was flowing smoothly. I found it
+most efficient to add the frames directly to the HRM rather than adding them
+to an array and then adding parts of the array over. The arduino side of things
+was the same as in challenge 2
+
+![](images/chall3.gif)
 ---
