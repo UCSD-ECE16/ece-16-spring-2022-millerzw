@@ -1,6 +1,8 @@
 from ECE16Lib.CircularList import CircularList
 import ECE16Lib.DSP as filt
 import numpy as np
+import glob
+from sklearn.mixture import GaussianMixture as GMM
 
 """
 A class to enable a simple heart rate monitor
@@ -19,6 +21,7 @@ class HRMonitor:
     __new_samples = 0  # How many new samples exist to process
     __fs = 0  # Sampling rate in Hz
     __thresh = 0.6  # Threshold from Tutorial 2
+    gmm=GMM(n_components=2) #create the gmm
 
     """
   Initialize the class instance
@@ -102,3 +105,73 @@ class HRMonitor:
 
     def adjustThreshold(self, threshold):
         self.__thresh = threshold
+
+
+    # Retrieve a list of the names of the subjects
+    def get_subjects(self,directory):
+      filepaths = glob.glob(directory + "\\*")
+      return [filepath.split("\\")[-1] for filepath in filepaths]
+
+    # Retrieve a data file, verifying its FS is reasonable
+    def get_data(self,directory, subject, trial, fs):
+      search_key = "%s\\%s\\%s_%02d_*.csv" % (directory, subject, subject, trial)
+      filepath = glob.glob(search_key)[0]
+      t, ppg = np.loadtxt(filepath, delimiter=',', unpack=True)
+      t = (t-t[0])/1e3
+      hr = self.get_hr(filepath, len(ppg), fs)
+
+      fs_est = self.estimate_fs(t)
+      if(fs_est < fs-1 or fs_est > fs):
+        print("Bad data! FS=%.2f. Consider discarding: %s" % (fs_est,filepath))
+
+      return t, ppg, hr, fs_est
+
+    # Estimate the heart rate from the user-reported peak count
+    def get_hr(self,filepath, num_samples, fs):
+      count = int(filepath.split("_")[-1].split(".")[0])
+      seconds = num_samples / fs
+      return count / seconds * 60 # 60s in a minute
+
+    # Estimate the sampling rate from the time vector
+    def estimate_fs(self,times):
+      return 1 / np.mean(np.diff(times))
+
+    def processGMM(self,x):
+        x = filt.detrend(x, 25)
+        x = filt.moving_average(x, 5)
+        # bl, al = filt.create_filter(3, 1, "lowpass", 50)  # Low-pass Filter Design
+        # x = filt.filter(bl, al, x)  # Low-pass Filter Signal
+        x = filt.gradient(x)
+        return filt.normalize(x)
+
+    # Estimate the heart rate given GMM output labels
+    def estimate_hr(self, labels, num_samples, fs):
+        peaks = np.diff(labels, prepend=0) == 1
+        count = sum(peaks)
+        seconds = num_samples / fs
+        hr = count / seconds * 60  # 60s in a minute
+        return hr, peaks
+    def train(self):
+        fs = 50
+        directory = ".\\data"
+        subjects = self.get_subjects(directory)
+
+        train_data = np.array([])
+        for subject in subjects:
+            for trial in range(1, 6):
+                t, ppg, hr, fs_est = self.get_data(directory, subject, trial, fs)
+
+                train_data = np.append(train_data, self.processGMM(ppg))
+
+        # Train the GMM
+        train_data = train_data.reshape(-1, 1)  # convert from (N,1) to (N,) vector
+        self.gmm = GMM(n_components=2).fit(train_data)
+
+    def predict(self):
+        test=self.processGMM(self.__ppg)
+
+        labels = self.gmm.predict(test.reshape(-1, 1))
+
+        hr_est, peaks = self.estimate_hr(labels, len(self.__ppg), self.__fs)
+
+        return hr_est
