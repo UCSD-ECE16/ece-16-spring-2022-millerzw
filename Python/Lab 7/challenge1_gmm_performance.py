@@ -15,6 +15,15 @@ from scipy.stats import norm
 #Import for RMSE
 from sklearn.metrics import mean_squared_error
 
+#Import for R^2
+#This will show how much the variance between data points differs from true correlation
+#ex 0.5 means ~half of the results can be explained from the ML model
+from sklearn.metrics import r2_score
+
+#Import for MAE (Mean Absolute Error)
+#similar to rmse, this measures the average magnitude of error of the results as comapred to the true calues
+from sklearn.metrics import mean_absolute_error
+
 # Retrieve a list of the names of the subjects
 def get_subjects(directory):
   filepaths = glob.glob(directory + "\\*")
@@ -125,11 +134,13 @@ if __name__ == "__main__":
       #plt.show()
 
     rmse=mean_squared_error(actual, estimates, squared=False)
+    r2= r2_score(actual,estimates)
+    mae= mean_absolute_error(actual,estimates)
     #plt.plot(estimates, estimates)
     plt.scatter(actual, estimates)
     plt.ylabel("Estimated HR (BPM)")
     plt.xlabel("True HR (BPM)")
-    plt.title("RMSE plot: Coefficient (RMSE) = {:.2f}".format(rmse))
+    plt.title("Coefficient (RMSE) = {:.2f}, Coefficient (R^2) = {:.2f}, Coefficient (MAE) = {:.2f}".format(rmse,r2,mae))
     plt.show()
     #print(rmse)
 
