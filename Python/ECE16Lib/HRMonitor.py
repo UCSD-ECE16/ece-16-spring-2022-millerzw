@@ -3,6 +3,8 @@ import ECE16Lib.DSP as filt
 import numpy as np
 import glob
 from sklearn.mixture import GaussianMixture as GMM
+import matplotlib.pyplot as plt
+from scipy.stats import norm
 
 """
 A class to enable a simple heart rate monitor
@@ -136,13 +138,15 @@ class HRMonitor:
     def estimate_fs(self,times):
       return 1 / np.mean(np.diff(times))
 
-    def processGMM(self,x):
+    def processGMM(self,x ):
+        x=np.array(x)
         x = filt.detrend(x, 25)
         x = filt.moving_average(x, 5)
         # bl, al = filt.create_filter(3, 1, "lowpass", 50)  # Low-pass Filter Design
         # x = filt.filter(bl, al, x)  # Low-pass Filter Signal
         x = filt.gradient(x)
-        return filt.normalize(x)
+        x=filt.normalize(x)
+        return x
 
     # Estimate the heart rate given GMM output labels
     def estimate_hr(self, labels, num_samples, fs):
@@ -151,6 +155,15 @@ class HRMonitor:
         seconds = num_samples / fs
         hr = count / seconds * 60  # 60s in a minute
         return hr, peaks
+
+    def plot_gaussian(self, weight, mu, var):
+        weight = float(weight)
+        mu = float(mu)
+        var = float(var)
+
+        x = np.linspace(0, 1)
+        y = weight * norm.pdf(x, mu, np.sqrt(var))
+        plt.plot(x, y)
     def train(self):
         fs = 50
         directory = ".\\data"
@@ -166,6 +179,10 @@ class HRMonitor:
         # Train the GMM
         train_data = train_data.reshape(-1, 1)  # convert from (N,1) to (N,) vector
         self.gmm = GMM(n_components=2).fit(train_data)
+        plt.hist(train_data, 100, density=True)
+        self.plot_gaussian(self.gmm.weights_[0], self.gmm.means_[0], self.gmm.covariances_[0])
+        self.plot_gaussian(self.gmm.weights_[1], self.gmm.means_[1], self.gmm.covariances_[1])
+        plt.show()
 
     def predict(self):
         test=self.processGMM(self.__ppg)
@@ -174,4 +191,4 @@ class HRMonitor:
 
         hr_est, peaks = self.estimate_hr(labels, len(self.__ppg), self.__fs)
 
-        return hr_est
+        return hr_est, peaks

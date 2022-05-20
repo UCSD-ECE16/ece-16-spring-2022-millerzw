@@ -10,16 +10,18 @@ from time import time
 
 if __name__ == "__main__":
     fs = 50  # sampling rate
-    num_samples = 1500  # 30 seconds of data @ 50Hz
+    num_samples = 3000  # 60 seconds of data @ 50Hz
     process_time = 1  # compute the heartbeat count every second
 
     hr_monitor = HRMonitor(num_samples, fs, [])
+    hr_monitor.adjustThreshold(0.5)
 
     comms = Communication("COM4", 115200)
     comms.clear()  # just in case any junk is in the pipes
     comms.send_message("wearable")  # begin sending data
     sendHRM=0
     hr_monitor.train()
+    print("Model trained")
 
     try:
         previous_time = time()
@@ -39,12 +41,12 @@ if __name__ == "__main__":
                 current_time = time()
                 if (current_time - previous_time > process_time):
                     previous_time = current_time
-                    hr, peaks, filtered = hr_monitor.process()
+                    #hr, peaks, filtered = hr_monitor.processGMM()
                     #print("heart count: {:f}".format(hr))
-                    prediction = hr_monitor.predict()
-
+                    hr_est, peaks = hr_monitor.predict()
                     #sendHRM=float(hr*1000)%100
-                    sendHRM = prediction*1000
+                    sendHRM = hr_est
+                    print(sendHRM)
 
                 # we want to always send the heartbeat number, not just on the 1 second time
                 comms.send_message("%2f"% sendHRM)
