@@ -7,6 +7,7 @@ from ECE16Lib.HRMonitor import HRMonitor
 import numpy as np
 from pyowm import OWM
 from datetime import date
+import datetime
 
 import serial #the Pyserial library
 #import time #for timing purposes
@@ -26,9 +27,12 @@ if __name__ == "__main__":
     localSteps=0
     localBeats=0
     localWeather="booting"
+    timeString="booting"
 
     owm = OWM('fcc8e8f6ccdb6b424c31379ad974fb22').weather_manager()
     weather = owm.weather_at_place('San Diego,CA,US').weather
+
+    hr_monitor.train()
 
     try:
         previous_time = time()
@@ -54,7 +58,8 @@ if __name__ == "__main__":
                     previous_time = current_time
 
                     steps, peaks, filtered = ped.process()
-                    hr, peaks, filtered = hr_monitor.process()
+                    #hr, peaks, filtered = hr_monitor.process()
+                    hr=hr_monitor.predict()
 
                     localSteps=steps;
                     localBeats=hr;
@@ -70,7 +75,9 @@ if __name__ == "__main__":
                     else:
                         #mode 2 type eg. Sunny Cloudy etc.
                         localWeather= str(weather.detailed_status)
-                comms.send_message(str(current_time)+"," + "Steps: "+str(localSteps)+"," + "Heartbeat: "+str(localBeats)+ ","+localWeather)
+                    now = datetime.datetime.now()
+                    timeString = str(now.strftime('%H:%M:%S'))
+                comms.send_message(timeString+"," + "Steps: "+str(localSteps)+"," + "Heartbeat: "+str(localBeats)+ ","+localWeather)
 
 
     except(Exception, KeyboardInterrupt) as e:
