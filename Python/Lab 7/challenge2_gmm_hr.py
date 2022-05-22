@@ -10,7 +10,7 @@ from time import time
 
 if __name__ == "__main__":
     fs = 50  # sampling rate
-    num_samples = 3000  # 60 seconds of data @ 50Hz
+    num_samples = 750  # 15 seconds of data @ 50Hz
     process_time = 1  # compute the heartbeat count every second
 
     hr_monitor = HRMonitor(num_samples, fs, [])
@@ -43,7 +43,7 @@ if __name__ == "__main__":
                     previous_time = current_time
                     #hr, peaks, filtered = hr_monitor.processGMM()
                     #print("heart count: {:f}".format(hr))
-                    hr_est, peaks = hr_monitor.predict()
+                    hr_est = hr_monitor.predict()
                     #sendHRM=float(hr*1000)%100
                     sendHRM = hr_est
                     print(sendHRM)

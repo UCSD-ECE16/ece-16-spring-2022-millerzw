@@ -139,14 +139,12 @@ class HRMonitor:
       return 1 / np.mean(np.diff(times))
 
     def processGMM(self,x ):
-        x=np.array(x)
         x = filt.detrend(x, 25)
         x = filt.moving_average(x, 5)
         # bl, al = filt.create_filter(3, 1, "lowpass", 50)  # Low-pass Filter Design
         # x = filt.filter(bl, al, x)  # Low-pass Filter Signal
         x = filt.gradient(x)
-        x=filt.normalize(x)
-        return x
+        return filt.normalize(x)
 
     # Estimate the heart rate given GMM output labels
     def estimate_hr(self, labels, num_samples, fs):
@@ -185,10 +183,10 @@ class HRMonitor:
         plt.show()
 
     def predict(self):
-        test=self.processGMM(self.__ppg)
+        test=self.processGMM(np.array(self.__ppg))
 
         labels = self.gmm.predict(test.reshape(-1, 1))
 
-        hr_est, peaks = self.estimate_hr(labels, len(self.__ppg), self.__fs)
+        hr_est, peaks = self.estimate_hr(labels, self.__num_samples, self.__fs)
 
-        return hr_est, peaks
+        return hr_est
