@@ -7,6 +7,7 @@ from pygame import *
 import sys
 from os.path import abspath, dirname
 from random import choice
+from ECE16Lib.Communication import Communication
 
 ''' ============================================================ '''
 import socket
@@ -14,7 +15,12 @@ host = "127.0.0.1"
 port = 65432
 mySocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 mySocket.bind((host, port))
+addr=('127.0.0.1', 65432)
+#mySocket.listen(1)
+#client,addr = mySocket.accept()
 mySocket.setblocking(0)
+''' ============================================================ '''
+#fileData=open(r"C:\Users\Zach\PycharmProjects\ece-16-spring-2022-millerzw\Project\ece16-space-invaders\controller\Python\GameData.txt","w")
 ''' ============================================================ '''
 
 BASE_PATH = abspath(dirname(__file__))
@@ -45,6 +51,10 @@ BLOCKERS_POSITION = 450
 ENEMY_DEFAULT_POSITION = 65  # Initial value for a new game
 ENEMY_MOVE_DOWN = 35
 
+
+
+##
+#comms = Communication("COM4", 115200)
 
 class Ship(sprite.Sprite):
     def __init__(self):
@@ -319,6 +329,21 @@ class ShipExplosion(sprite.Sprite):
             game.screen.blit(self.image, self.rect)
         elif 900 < passed:
             self.kill()
+            #####
+            #comms.send_message("dead")
+
+            #fileData.seek(0)
+            #fileData.truncate()
+            #fileData.write("dead")
+
+            #msg, _ = mySocket.recvfrom(1024)  # receive 1024 bytes
+            #msg = msg.decode('utf-8')
+            ###mySocket.send("dead".encode("UTF-8"))
+            #print("KILLED HERE")
+            try:
+                mySocket.sendto("dead".encode("utf-8"), addr)
+            except KeyboardInterrupt:
+                pass
 
 
 class Life(sprite.Sprite):
@@ -373,6 +398,7 @@ class SpaceInvaders(object):
         self.life2 = Life(742, 3)
         self.life3 = Life(769, 3)
         self.livesGroup = sprite.Group(self.life1, self.life2, self.life3)
+        self.addr=('127.0.0.1', 65432)
 
     def reset(self, score):
         self.player = Ship()
@@ -466,7 +492,7 @@ class SpaceInvaders(object):
     ''' ============================================================ '''
     def check_input_udp_socket(self):
         try:
-            msg, _ = mySocket.recvfrom(1024) # receive 1024 bytes
+            msg, self.addr = mySocket.recvfrom(1024) # receive 1024 bytes
             msg = msg.decode('utf-8')
             print("Command: " + msg)
 
@@ -645,6 +671,23 @@ class SpaceInvaders(object):
                         self.mainScreen = False
 
             elif self.startGame:
+                #print("Score" , self.score)
+                stringToParse= str(self.livesGroup)
+                for element in stringToParse:
+                    if (element.isdigit()):
+                        numLives=element
+                #print("Lives" , numLives)
+                sendData = "Score: " + str(self.score) + ","+"Lives: "+ str(numLives)
+
+                #fileData.seek(0)
+                #fileData.write(sendData)
+
+                #print(sendData)
+                #comms.send_message(sendData)
+
+
+                ###mySocket.sendto(sendData.encode("UTF-8"))
+
                 if not self.enemies and not self.explosionsGroup:
                     currentTime = time.get_ticks()
                     if currentTime - self.gameTimer < 3000:
@@ -686,6 +729,10 @@ class SpaceInvaders(object):
                     self.create_new_ship(self.makeNewShip, currentTime)
                     self.make_enemies_shoot()
 
+                try:
+                    mySocket.sendto(sendData.encode("utf-8"), self.addr)
+                except KeyboardInterrupt:
+                    continue
             elif self.gameOver:
                 currentTime = time.get_ticks()
                 # Reset enemy starting position
@@ -703,4 +750,5 @@ if __name__ == '__main__':
     finally:
         ''' ============================================================ '''
         mySocket.close()
+        #fileData.close()
         ''' ============================================================ '''
