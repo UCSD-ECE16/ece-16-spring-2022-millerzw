@@ -42,6 +42,8 @@ class PygameController:
         # 3. Forever collect orientation and send to PyGame until user exits
         print("Use <CTRL+C> to exit the program.\n")
         prevTime = time()
+        currLifeCount=3
+        lastLifeCount=3
         while True:
             message = self.comms.receive_message()
             if (message != None):
@@ -67,32 +69,46 @@ class PygameController:
                     command = "RIGHT"
 
                 self.procTime = self.timeTable[int(m2)]
-                self.procTime=1
+                #self.procTime=1
 
                 currTime = time()
+                msgToArduino=" "
                 if command is not None:
                     if (currTime - prevTime > self.procTime):
                         prevTime = currTime
                         mySocket.send(command.encode("UTF-8"))
 
-                        #fileData.seek(0)
-                        #msgToArduino = fileData.readline()
-                        msgToArduino="ey"
-                        if (msgToArduino != "" and msgToArduino != "\n"):
-                            self.comms.send_message(msgToArduino)
-                            print(msgToArduino)
+                        fileData.seek(0)
+                        msgToArduino = fileData.readline()
 
                         if (int(m3) == 1):
                             commandTwo="FIRE"
                             mySocket.send(commandTwo.encode("UTF-8"))
 
-                try:
-                    data = mySocket.recv(1024)
-                    data=data.decode("utf-8")
-                    print(data)
-                    #self.comms.send_message(data)
-                except BlockingIOError:
-                    continue
+                        #msgToArduino="ey"
+                    if (msgToArduino != "" and msgToArduino != "\n" and msgToArduino !=" "):
+                        self.comms.send_message(msgToArduino)
+                        print(msgToArduino)
+                        try:
+                            a,b = msgToArduino.split(',')
+                            for element in b:
+                                if (element.isdigit()):
+                                    currLifeCount = int(element)
+                        except ValueError:
+                            continue
+
+                        if (currLifeCount!=lastLifeCount):
+                            self.comms.send_message("dead")
+                            lastLifeCount=currLifeCount
+
+
+            try:
+                data = mySocket.recv(1024)
+                data=data.decode("utf-8")
+                print(data)
+                self.comms.send_message(data)
+            except BlockingIOError:
+                continue
 
 
                 #fileData.seek(0)

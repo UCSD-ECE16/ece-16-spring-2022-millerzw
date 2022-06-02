@@ -20,7 +20,7 @@ addr=('127.0.0.1', 65432)
 #client,addr = mySocket.accept()
 mySocket.setblocking(0)
 ''' ============================================================ '''
-#fileData=open(r"C:\Users\Zach\PycharmProjects\ece-16-spring-2022-millerzw\Project\ece16-space-invaders\controller\Python\GameData.txt","w")
+fileData=open(r"C:\Users\Zach\PycharmProjects\ece-16-spring-2022-millerzw\Project\ece16-space-invaders\controller\Python\GameData.txt","w")
 ''' ============================================================ '''
 
 BASE_PATH = abspath(dirname(__file__))
@@ -340,10 +340,11 @@ class ShipExplosion(sprite.Sprite):
             #msg = msg.decode('utf-8')
             ###mySocket.send("dead".encode("UTF-8"))
             #print("KILLED HERE")
-            try:
-                mySocket.sendto("dead".encode("utf-8"), addr)
-            except KeyboardInterrupt:
-                pass
+            # addr = ('127.0.0.1', 65432)
+            # try:
+            #     mySocket.sendto("dead".encode("utf-8"), addr)
+            # except KeyboardInterrupt:
+            #     pass
 
 
 class Life(sprite.Sprite):
@@ -679,8 +680,8 @@ class SpaceInvaders(object):
                 #print("Lives" , numLives)
                 sendData = "Score: " + str(self.score) + ","+"Lives: "+ str(numLives)
 
-                #fileData.seek(0)
-                #fileData.write(sendData)
+                fileData.seek(0)
+                fileData.write(sendData)
 
                 #print(sendData)
                 #comms.send_message(sendData)
@@ -729,10 +730,10 @@ class SpaceInvaders(object):
                     self.create_new_ship(self.makeNewShip, currentTime)
                     self.make_enemies_shoot()
 
-                try:
-                    mySocket.sendto(sendData.encode("utf-8"), self.addr)
-                except KeyboardInterrupt:
-                    continue
+                # try:
+                #     mySocket.sendto(sendData.encode("utf-8"), self.addr)
+                # except KeyboardInterrupt:
+                #     continue
             elif self.gameOver:
                 currentTime = time.get_ticks()
                 # Reset enemy starting position
@@ -750,5 +751,5 @@ if __name__ == '__main__':
     finally:
         ''' ============================================================ '''
         mySocket.close()
-        #fileData.close()
+        fileData.close()
         ''' ============================================================ '''
