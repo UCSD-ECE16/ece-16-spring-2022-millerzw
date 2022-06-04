@@ -7,6 +7,7 @@ from pygame import *
 import sys
 from os.path import abspath, dirname
 from random import choice
+
 from ECE16Lib.Communication import Communication
 
 ''' ============================================================ '''
@@ -146,6 +147,7 @@ class EnemiesGroup(sprite.Group):
         self._aliveColumns = list(range(columns))
         self._leftAliveColumn = 0
         self._rightAliveColumn = columns - 1
+        self.randomMagnitude = [(0,0), (1,10), (2,20), (3,30)]
 
     def update(self, current_time):
         if current_time - self.timer > self.moveTime:
@@ -166,7 +168,14 @@ class EnemiesGroup(sprite.Group):
                     if self.bottom < enemy.rect.y + 35:
                         self.bottom = enemy.rect.y + 35
             else:
-                velocity = 10 if self.direction == 1 else -10
+                if self.direction == 1:
+                    theChoice = choice(self.randomMagnitude)
+                    velocity = 10 + theChoice[1]
+                    self.moveNumber += theChoice[0]
+                else:
+                    theChoice = choice(self.randomMagnitude)
+                    velocity = -10 - theChoice[1]
+                    self.moveNumber += theChoice[0]
                 for enemy in self:
                     enemy.rect.x += velocity
                     enemy.toggle_image()

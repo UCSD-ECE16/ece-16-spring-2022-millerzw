@@ -36,7 +36,7 @@ void setupAccelSensor() {
  * Read a sample from the accelerometer's 3 axes
  */
 void readAccelSensor() {
-  ax = analogRead(X_PIN);
+  ax = analogRead(X_PIN); 
   ay = analogRead(Y_PIN);
   az = analogRead(Z_PIN);
 }

@@ -48,7 +48,7 @@ void loop() {
   //Serial.print(" az: "); Serial.println(az);
   //readPhotoSensor();
   //Serial.println(String(getTaps()));
-
+  
   String command = receiveMessage();
   if(command == "stop") {
     sending = false;
@@ -76,7 +76,7 @@ void loop() {
     response += String(getTaps());
     // Type of Move , Speed of move, Shooting or not Shooting
     sendMessage(response);
-
+    
     //sendMessage(String(getOrientation()));
   }
 

@@ -10,6 +10,8 @@
 MAX30105 photoSensor; // instantiate the Photodetector object
 const int MAX_READING = 32767; // 2^15-1; might change w/config – TEST IT!!
 
+const int PPG_ZERO= 32767;
+
 /*
  * Initialize the sensor to use red, green, and IR LEDs for the best signal
  */
@@ -41,4 +43,15 @@ void setupPhotoSensor() {
 void readPhotoSensor() {
   // Get heartbeat pulse data and invert it
   ppg = MAX_READING - photoSensor.getIR();
+}
+
+int getTaps(){
+  int tap=0;
+  int p= ppg-PPG_ZERO;
+  p=abs(p);
+  if (p > 25000) tap=1;
+  else tap=0;
+
+  return tap;
+
 }
