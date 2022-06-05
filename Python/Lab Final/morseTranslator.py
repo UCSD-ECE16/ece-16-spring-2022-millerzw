@@ -53,7 +53,7 @@ def morseToEng(word):
     result=""
     spaceLoc=""
     i=0
-    print("here")
+    #print("here")
 
     for letter in word:
         if (letter != " "):
@@ -69,15 +69,14 @@ def morseToEng(word):
                 spaceLoc=""
     return  result
 
-print(morseToEng(".... ..  .... --- .--  "))
+#print(morseToEng(".... ..  .... --- .--  "))
 #m1              ".... ..   ....   --- .- -   "
 #m2              ".... ..  .... --- .--  "
 
 if __name__ == "__main__":
     fs = 50  # sampling rate
     num_samples = 250  # 5 seconds of data @ 50Hz
-    process_time = 1  # compute the step count every second
-
+    process_time = 0.5  # compute the display twice a second
 
 
     comms = Communication("COM4", 115200)
@@ -86,6 +85,8 @@ if __name__ == "__main__":
 
     word=""
     letter=""
+
+    finished=""
 
     try:
         previous_time = time()
@@ -109,15 +110,22 @@ if __name__ == "__main__":
                 elif (currChar=="w"):
                     #end of the word
                     word+=" "
-                    print(word)
+                    #print(word)
+                    #print(morseToEng(word))
+                    finished=morseToEng(word)
+                    print(finished)
 
                 # Collect data in the pedometer
                 #word=word+currChar
 
                 # if enough time has elapsed, process the data and plot it
-                current_time = time()
-                if (current_time - previous_time > process_time):
-                    previous_time = current_time
+            current_time = time()
+            if (current_time - previous_time > process_time):
+                previous_time = current_time
+                try:
+                    comms.send_message(str(finished))
+                except IndexError:
+                    continue
 
                     #send word to arduino
                 # we want to always send the step number, not just on the 1 second time
