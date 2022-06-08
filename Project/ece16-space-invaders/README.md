@@ -23,7 +23,8 @@ computer unfortunately does not have bluetooth.
 ###Requirements
 
 __**Improvements**__: 
-- Decouple fire and move by using the ppg as a fire button.
+- Decouple fire and move by using the ppg as a fire button: This was done by sending an extra CSV to the python controller program
+from the Arduino. At this stage it was "movement type","fire boolean".
 - Smoother movement 
   - created thresholds for what angle is considered a movement. ie creating a dead space. 
 - Random sprite movements.
@@ -31,11 +32,15 @@ __**Improvements**__:
 
 __**Features**__:
 - Sensitivity setting
-    -(hitting the button on the arduino switches the sensitivity between 3 options by changing the sampling frequency of the controller). 
-- Display Score/Lives
-  - this was difficult because of socket overloading with too much data. We used a file to store the data instead and read from it using the controller. 
+    -(hitting the button on the arduino switches the sensitivity between 3 options by changing the sampling frequency of the controller):
+Once again this was done by sending an extra CSV to the python controller program from the Arduino. It ended up sending
+3 value, a movement type, fire boolean, and 0-3 movement speed setting. In python there was an array containing
+the three movement speed options that would be picked based on this value
+- Display Score/Lives.
+  - this was difficult because of socket overloading with too much data. We used a file to store the data instead and read from it using the controller: Note to run this on a different
+machine, one would have to rename the file directory correctly.
 - Motor Buzz when hit
-  - The game would check if the last run through of the program had the same lives as the current using the string from the file we created, if they didn't match the motor would buzz
+  - The game would check if the last run through of the program had the same lives as the current using the string from the file we created, if they didn't match the motor would buzz.
 
 ### GIF
 ##### Note if images are broken on this page check submission by Justin Kane-Starr
@@ -50,6 +55,21 @@ to the computer in python. Python then uses a Dictionary that can translate the 
 using in-built python libraries. The read string is parsed between each space read from the arduino and translates
 this sequence of dits and dats directly. Once there has been a long enough pause it will 
 print out the word to the python terminal. In the GIF below we print out the statement "Hi Ramsin."
+
+On the arduino side of things, we first created a system to differentiate dits and dashes by checking if
+the length of the button being held was less than (dit) or longer than (dash) a constant variable denoted
+at the top of the program. In this way the program can be tuned for the user if they are bad at morse code (as we both were).
+Then we needed to create a differentiation between letters and words. We did this by making another timer to
+where if the button hadn't been pressed down by a constant time as denoted at the top of the file, we would send
+a denoter for letter. Then we would check if the last sent message was a letter denoter and even more time 
+had passed since an input we would send a word denoter. We made sure to make booleans to check that there must
+be some dits and dashes before we can consider a letter happening and there must be a letter before a space.
+
+Then in python we were able to switch the messages from arduino to their more proper characters. Letters would
+get spaces between them and words an extra space. Dits and dashes were kept as periods and hyphens. After,
+it was a simple as using the dict and creating a "decoder" function that would turn the sentence to english.
+We would save this sentence and periodically (when a new word was added) send it back to Arduino to show
+up on the display.
 
 ### GIF
 ##### Note if images are broken on this page check submission by Justin Kane-Starr
