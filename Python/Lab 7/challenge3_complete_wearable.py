@@ -29,7 +29,7 @@ if __name__ == "__main__":
     localWeather="booting"
     timeString="booting"
 
-    owm = OWM('fcc8e8f6ccdb6b424c31379ad974fb22').weather_manager()
+    owm = OWM('log_key').weather_manager()
     weather = owm.weather_at_place('San Diego,CA,US').weather
 
     hr_monitor.train()
